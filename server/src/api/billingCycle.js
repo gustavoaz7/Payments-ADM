@@ -40,6 +40,20 @@ BillingCycle.methods(['get', 'post', 'put', 'delete'])
 BillingCycle.updateOptions({ new: true, runValidators: true })
 
 
+// ===== ERROR HANDLING =====
+
+BillingCycle.after('post', errorHandler).after('put', errorHandler)
+
+function errorHandler(req, res, next) {
+  if (res.locals.bundle.errors){
+    const errors = []
+    _.forIn(res.locals.bundle.errors, err => errors.push(err.message))
+    return res.status(500).json({ errors })
+  }
+  next()
+}
+
+
 // ===== ROUTES =====
 
 BillingCycle.route('count', (req, res, next) => {
