@@ -40,4 +40,38 @@ BillingCycle.methods(['get', 'post', 'put', 'delete'])
 BillingCycle.updateOptions({ new: true, runValidators: true })
 
 
+// ===== ROUTES =====
+
+BillingCycle.route('count', (req, res, next) => {
+  // restful method to count the number of records in the collection
+  BillingCycle.count((err, value) => {
+    if (err) return read.status(500).json({ errors: [err] })
+    res.json({ value })
+  })
+})
+
+BillingCycle.route('summary', (req, res, next) => {
+  BillingCycle.aggregate(
+    {
+      $project: {   // Sum of all credits and debts for each record
+        credit: {$sum: "$credits.value"},
+        debt: {$sum: "$debts.value"}
+      }
+    }, {
+      $group: {     // Sum of all projected credit and debt (entire collection)
+        _id: null,
+        credit: {$sum: "$credit"},
+        debt: {$sum: "$debt"}
+      }
+    }, {
+      $project: { _id: 0, credit: 1, debt: 1 } // 0-False  1-Tre
+    }, (err, result) => {
+      if(err) returnres.status(500).json({ errors: [err] })
+      // result[0] because our result is a single value (group: _id: null)
+      res.json(result[0] || { credit: 0, debt: 0 })
+    }
+  )
+})
+
+
 module.exports = BillingCycle
