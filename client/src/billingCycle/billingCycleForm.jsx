@@ -6,11 +6,21 @@ import { bindActionCreators } from 'redux'
 import LabelAndInput from '../common/form/labelAndInput'
 import { init } from './billingCycleActions'
 import ItemList from './itemList'
+import Summary from './summary'
 
 class BillingCycleForm extends Component {
+
+  calculateSummary() {
+    const sum = (tot, val) => tot + val
+    return {
+      sumCredits: this.props.credits.map(credit => +credit.value || 0).reduce(sum),
+      sumDebts: this.props.debts.map(debt => +debt.value || 0).reduce(sum)
+    }
+  }
+
   render() {
     const { handleSubmit, readOnly, credits, debts } = this.props
-
+    const { sumCredits, sumDebts } = this.calculateSummary()
     return (
       <form role="role" onSubmit={handleSubmit}>
         <div className="box-body">
@@ -23,6 +33,7 @@ class BillingCycleForm extends Component {
           <Field name="year" component={LabelAndInput} readOnly={readOnly}
             label="Year" cols="12 4" placeholder="Year" type="number"
           />
+          <Summary credit={sumCredits} debt={sumDebts} />
           <ItemList cols="12 6" readOnly={readOnly} list={credits} 
             field="credits" legend="Credits"
           />
