@@ -1,27 +1,29 @@
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import labelAndInput from '../common/form/labelAndInput'
+import LabelAndInput from '../common/form/labelAndInput'
 import { init } from './billingCycleActions'
+import CreditList from './creditList'
 
 class BillingCycleForm extends Component {
   render() {
-    const { handleSubmit, readOnly } = this.props
+    const { handleSubmit, readOnly, credits } = this.props
 
     return (
       <form role="role" onSubmit={handleSubmit}>
         <div className="box-body">
-          <Field name="name" component={labelAndInput} readOnly={readOnly}
+          <Field name="name" component={LabelAndInput} readOnly={readOnly}
             label="Name" cols='12 4' placeholder="Name"
           />
-          <Field name="month" component={labelAndInput} readOnly={readOnly}
+          <Field name="month" component={LabelAndInput} readOnly={readOnly}
             label="Month" cols='12 4' placeholder="Month" type="number"
           />
-          <Field name="year" component={labelAndInput} readOnly={readOnly}
+          <Field name="year" component={LabelAndInput} readOnly={readOnly}
             label="Year" cols="12 4" placeholder="Year" type="number"
           />
+          <CreditList cols="12 6" readOnly={readOnly} list={credits} />
         </div>
         <div className="box-footer">
           <button type="submit" className={`btn btn-${this.props.submitClass}`}>
@@ -42,6 +44,9 @@ BillingCycleForm = reduxForm({ form: "billingCycleForm", destroyOnUnmount: false
     // Lets us use the form data on update initialization since they use the same Form component
     // And for our dynamic form (future)
 
+const selector = formValueSelector('billingCycleForm')  // grabs information from given form
+const mapStateToProps = state => ( {credits: selector(state, 'credits')} )  // arguments: state and attr name
+
 const mapDispatchToProps = dispatch => bindActionCreators({ init }, dispatch)
 
-export default connect(null, mapDispatchToProps)(BillingCycleForm)
+export default connect(mapStateToProps, mapDispatchToProps)(BillingCycleForm)
