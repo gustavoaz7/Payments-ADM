@@ -11,9 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-query-int": "^2.0.0",
+    "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
     "mongoose": "^4.13.7",
     "mongoose-paginate": "^5.0.3",
