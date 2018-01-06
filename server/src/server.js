@@ -25,7 +25,7 @@ server.use((req, res, next) => {
 // ===== DATABASE =====
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost/payment-adm', { useMongoClient: true })
+mongoose.connect(process.env.DB || 'mongodb://localhost/payment-adm', { useMongoClient: true })
 .then(() => console.log('Successfully connected to database'))
 .catch(err => console.log('Error connecting to database: '+err.message))
 
