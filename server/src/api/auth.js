@@ -20,8 +20,8 @@ const login = (req, res, next) => {
     if(err) return sendErrorsFromDB(res, err)
     // if user exists, check if password match
     if(user && bcrypt.compareSync(password, user.password)) {
-      // create a jwt for this user
-      const token = jwt.sign(user, env.authSecret, {
+      // create a jwt for this user  (jwt v8.^ requires a plain object as payload -> .toJSON() )
+      const token = jwt.sign(user.toJSON(), env.authSecret, {
         expiresIn: '1 day'
       })
       const { name, email } = user
@@ -33,7 +33,6 @@ const login = (req, res, next) => {
 
 const validateToken = (req, res, next) => {
   const token = req.body.token || ''
-console.log('validating token');
   jwt.verify(token, env.authSecret, (err, decoded) => res.status(200).send({ valid: !err }))
 }
 
@@ -63,9 +62,9 @@ const signup = (req, res, next) => {
 
 const authorization = (req, res, next) => {
   // Allows req with 'OPTIONS' method
-  if(req.method === 'OPTIONS') next()
-  
-  const token = req.body.token || req.query.token || req.header['authorization']
+  if(req.method === 'OPTIONS') return next()
+
+  const token = req.body.token || req.query.token || req.headers['authorization']
   if(!token) return res.status(403).send({ errors: ['No token provided']})
   jwt.verify(token, env.authSecret, (err, decoded) => {
     if(err) return res.status(403).send({ errors: ['Falied to authenticate token']})
