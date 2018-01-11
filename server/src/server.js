@@ -4,7 +4,9 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 
-const { BillingCycle, billingCyclePOST } = require('./api/billingCycle')
+const { BillingCycle, 
+    billingCyclePOST, billingCycleGET, billingCyclePUT, billingCycleDELETE,
+    summary } = require('./api/billingCycle')
 const env = require('./config')
 const auth = require('./api/auth')
 
@@ -43,9 +45,12 @@ const protectedRouter = express.Router()
 server.use('/api', protectedRouter)
 // Add AUTHORIZATION middleware
 protectedRouter.use(auth.authorization)
-BillingCycle.register(protectedRouter, '/billingCycles')
-//  BillingCycle POST method - not using restful package so we can save billingCycle's author
+//  BillingCycle methods
+protectedRouter.get('/billingCycles', billingCycleGET)
 protectedRouter.post('/billingCycles', billingCyclePOST)
+protectedRouter.put('/billingCycles/:id', billingCyclePUT)
+protectedRouter.delete('/billingCycles/:id', billingCycleDELETE)
 
+protectedRouter.get('/billingCycles/summary', summary)
 
 server.listen(process.env.PORT || 3003, () => console.log('Server is up and running...'))

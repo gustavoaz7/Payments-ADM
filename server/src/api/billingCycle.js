@@ -31,12 +31,16 @@ const billingCycleSchema = new mongoose.Schema({
 const BillingCycle = restful.model('BillingCycle', billingCycleSchema)
 
 
-// ===== SERVICES =====
+// ===== METHODS =====
 
-BillingCycle.methods(['get', 'put', 'delete'])  
-  // BillingCycle POST method will be separated so we can add the author.
+const billingCycleGET = (req, res) => {
+  BillingCycle.find({ author: { email: req.loggedUser.email } }, (err, BCs) => {
+    if(err) return res.status(500).json({ errors: [err] })
+    return res.json( [...BCs] )
+  })
+}
+
 const billingCyclePOST = (req, res) => {
-
   const newBillingCycle = {
       name: req.body.name,
       month: req.body.month,
@@ -53,27 +57,22 @@ const billingCyclePOST = (req, res) => {
   })
 }
 
-// new: returns the updated object. runValidators: apply schema constrains on PUT request too
-BillingCycle.updateOptions({ new: true, runValidators: true })
-
-
-// ===== ERROR HANDLING =====
-
-BillingCycle.after('post', errorHandler).after('put', errorHandler)
-
-function errorHandler(req, res, next) {
-  if (res.locals.bundle.errors){
-    const errors = []
-    _.forIn(res.locals.bundle.errors, err => errors.push(err.message))
-    return res.status(500).json({ errors })
-  }
-  next()
+const billingCyclePUT = (req, res) => {
+  const updatedBC = req.body
+  BillingCycle.findByIdAndUpdate(req.params.id, updatedBC, {new: true}, (err, BC) => {
+    if(err) return res.status(500).json({ errors: [err] })
+    return res.json( [BC] )
+  })
 }
 
+const billingCycleDELETE = (req, res) => {
+  BillingCycle.findByIdAndRemove(req.params.id, (err, BC) => {
+    if(err) read.status(500).json({ errors: [err] })
+    return res.json({ message: "BillingCycle deleted."})
+  })
+}
 
-// ===== ROUTES =====
-
-BillingCycle.route('summary', (req, res, next) => {
+const summary = (req, res, next) => {
   BillingCycle.aggregate(
     // Filtering entries created by logged user (req.loggedUser from authorization middleware)
     { $match: { author: { email: req.loggedUser.email } } },
@@ -96,7 +95,21 @@ BillingCycle.route('summary', (req, res, next) => {
       res.json(result[0] || { credit: 0, debt: 0 })
     }
   )
-})
+}
 
 
-module.exports = { BillingCycle, billingCyclePOST }
+// ===== ERROR HANDLING =====
+
+BillingCycle.after('post', errorHandler).after('put', errorHandler)
+
+function errorHandler(req, res, next) {
+  if (res.locals.bundle.errors){
+    const errors = []
+    _.forIn(res.locals.bundle.errors, err => errors.push(err.message))
+    return res.status(500).json({ errors })
+  }
+  next()
+}
+
+
+module.exports = { BillingCycle, billingCyclePOST, billingCycleGET, billingCyclePUT, billingCycleDELETE, summary }

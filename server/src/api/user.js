@@ -1,4 +1,3 @@
-const restful = require('node-restful')
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
@@ -7,4 +6,4 @@ const userSchema = new mongoose.Schema({
   password: {type: String, required: true, min: 6}
 })
 
-module.exports = restful.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema)
