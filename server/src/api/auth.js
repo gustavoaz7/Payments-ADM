@@ -68,7 +68,7 @@ const authorization = (req, res, next) => {
   if(!token) return res.status(403).send({ errors: ['No token provided']})
   jwt.verify(token, env.authSecret, (err, decoded) => {
     if(err) return res.status(403).send({ errors: ['Falied to authenticate token']})
-    // req.decoded = decoded  // Passing decoded token to next middleware
+    req.loggedUser = decoded  // Passing logged user to next middleware
     next()
   })
 }

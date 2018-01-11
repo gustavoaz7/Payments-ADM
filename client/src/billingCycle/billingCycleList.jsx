@@ -12,7 +12,9 @@ class BillingCycleList extends Component {
 
   renderRows() {
     const list = this.props.list || []
-    return list.map(bilCyc => (
+    console.log(list)
+    const loggedUser = JSON.parse(localStorage.getItem('paymentADM_user'))
+    return list.filter(bc => loggedUser.email === bc.author.email).map(bilCyc => (
       <tr key={bilCyc._id}>
         <td>{bilCyc.name}</td>
         <td>{bilCyc.month}</td>
