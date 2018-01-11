@@ -1,13 +1,15 @@
 import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { reset as resetForm, initialize } from 'redux-form' // initialize - set the initial values in the form
-import { showTabs, selectTab } from '../common/tab/tabActions'
 
-const BASE_URL = 'http://localhost:3003/api'
+import { showTabs, selectTab } from '../common/tab/tabActions'
+import consts from '../consts'
+
 const INITIAL_VALUES = { credits: [{}], debts: [{}] }
 
 export function getList() {
-  const req = axios.get(`${BASE_URL}/billingCycles`)
+  const req = axios.get(`${consts.API_URL}/billingCycles`)
+  console.log('GET from billingcycles api route\n', req);
   return {
     type: 'BILLING_CYCLES_FETCHED',
     payload: req
@@ -30,7 +32,7 @@ export function remove(values) {
 function submit(values, method) {
   return dispatch => {
     const id = values._id ? values._id : ''
-    axios[method](`${BASE_URL}/billingCycles/${id}`, values)
+    axios[method](`${consts.API_URL}/billingCycles/${id}`, values)
     .then(res => {
       toastr.success('Success', 'Task successfully completed!')
       dispatch(init())
