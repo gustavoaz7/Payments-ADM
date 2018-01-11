@@ -5,7 +5,6 @@ const INITIAL_STATE = {
 }
 
 export default (state = INITIAL_STATE, action) => {
-  console.log(state)
   switch (action.type) {
     case 'TOKEN_VALIDATED':
       // Valid token

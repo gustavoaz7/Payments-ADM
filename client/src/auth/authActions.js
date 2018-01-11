@@ -20,6 +20,8 @@ function submit(values, url) {
       ])
     })
     .catch(e => {
+      console.log('catching error on submit action');
+      console.log(e);
       e.response.data.errors.forEach(err => toastr.error('Error ', err))
     })
   }
@@ -30,7 +32,6 @@ export function logout() {
 }
 
 export function validateToken(token) {
-  console.log('validating token');
   return dispatch => {
     if(token) {
       axios.post(`${consts.OAPI_URL}/validateToken`, { token })

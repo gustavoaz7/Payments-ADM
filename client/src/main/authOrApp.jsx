@@ -17,7 +17,6 @@ class AuthOrApp extends Component {
 
   render() {
     const { user, validToken } = this.props.auth
-    console.log(this.props)
     if(user && validToken) {
       // Setting 'authorization' into header of every req from axios
       axios.defaults.headers.common['authorization'] = user.token
