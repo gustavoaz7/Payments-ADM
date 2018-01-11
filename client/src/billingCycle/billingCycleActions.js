@@ -9,7 +9,6 @@ const INITIAL_VALUES = { credits: [{}], debts: [{}] }
 
 export function getList() {
   const req = axios.get(`${consts.API_URL}/billingCycles`)
-  console.log('GET from billingcycles api route\n', req);
   return {
     type: 'BILLING_CYCLES_FETCHED',
     payload: req
