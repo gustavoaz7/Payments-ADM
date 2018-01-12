@@ -8,7 +8,7 @@
     "dev-server": "nodemon",
     "build": "webpack --progress -p",
     "production": "SET NODE_ENV=production && node server/server.js",
-    "start": "webpack --progress -p && SET NODE_ENV=production && node server/server.js"
+    "start": "SET NODE_ENV=production && node server/server.js"
   },
   "keywords": [],
   "author": "",
