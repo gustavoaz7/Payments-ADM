@@ -2,7 +2,6 @@ const _ = require('lodash')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('./user')
-const env = require('../config')
 
 const emailRegex = /\S+@\S+\.\S+/
 
@@ -21,7 +20,7 @@ const login = (req, res, next) => {
     // if user exists, check if password match
     if(user && bcrypt.compareSync(password, user.password)) {
       // create a jwt for this user  (jwt v8.^ requires a plain object as payload -> .toJSON() )
-      const token = jwt.sign(user.toJSON(), env.authSecret, {
+      const token = jwt.sign(user.toJSON(), process.env.AUTH_SECRET || '17rgfhqw98', {
         expiresIn: '1 day'
       })
       const { name, email } = user
@@ -33,7 +32,7 @@ const login = (req, res, next) => {
 
 const validateToken = (req, res, next) => {
   const token = req.body.token || ''
-  jwt.verify(token, env.authSecret, (err, decoded) => res.status(200).send({ valid: !err }))
+  jwt.verify(token, process.env.AUTH_SECRET || '17rgfhqw98', (err, decoded) => res.status(200).send({ valid: !err }))
 }
 
 const signup = (req, res, next) => {
@@ -66,7 +65,7 @@ const authorization = (req, res, next) => {
 
   const token = req.body.token || req.query.token || req.headers['authorization']
   if(!token) return res.status(403).send({ errors: ['No token provided']})
-  jwt.verify(token, env.authSecret, (err, decoded) => {
+  jwt.verify(token, process.env.AUTH_SECRET || '17rgfhqw98', (err, decoded) => {
     if(err) return res.status(403).send({ errors: ['Falied to authenticate token']})
     req.loggedUser = decoded  // Passing logged user to next middleware
     next()

@@ -8,7 +8,6 @@ const {
   BillingCycle,
   billingCyclePOST, billingCycleGET, billingCyclePUT, billingCycleDELETE,
   summary } = require('./api/billingCycle')
-const env = require('./config')
 const auth = require('./api/auth')
 
 // ===== CONFIG =====
