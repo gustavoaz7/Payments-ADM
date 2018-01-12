@@ -4,9 +4,10 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 
-const { BillingCycle, 
-    billingCyclePOST, billingCycleGET, billingCyclePUT, billingCycleDELETE,
-    summary } = require('./api/billingCycle')
+const {
+  BillingCycle,
+  billingCyclePOST, billingCycleGET, billingCyclePUT, billingCycleDELETE,
+  summary } = require('./api/billingCycle')
 const env = require('./config')
 const auth = require('./api/auth')
 
@@ -52,5 +53,7 @@ protectedRouter.put('/billingCycles/:id', billingCyclePUT)
 protectedRouter.delete('/billingCycles/:id', billingCycleDELETE)
 
 protectedRouter.get('/billingCycles/summary', summary)
+
+server.use(express.static('public'))
 
 server.listen(process.env.PORT || 3003, () => console.log('Server is up and running...'))
