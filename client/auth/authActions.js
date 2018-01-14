@@ -12,6 +12,7 @@ export function signup(values) {
 }
 
 function submit(values, url) {
+  console.log('consts\n', consts);  
   return dispatch => {
     axios.post(url, values)
     .then(res => {
