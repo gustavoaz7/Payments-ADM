@@ -18,8 +18,7 @@ class Auth extends Component {
     this.state = { loginMode: true }
   }
 
-  changeMode() {
-    console.log('env variables\n', process.env)   
+  changeMode() {   
     this.setState({ loginMode: !this.state.loginMode })
   }
 

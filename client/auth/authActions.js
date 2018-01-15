@@ -12,7 +12,6 @@ export function signup(values) {
 }
 
 function submit(values, url) {
-  console.log('consts\n', consts);  
   return dispatch => {
     axios.post(url, values)
     .then(res => {
@@ -22,7 +21,7 @@ function submit(values, url) {
     })
     .catch(e => {
       console.log('catching error on submit action');
-      console.log(e);
+      console.log(e.response);
       e.response.data.errors.forEach(err => toastr.error('Error ', err))
     })
   }
