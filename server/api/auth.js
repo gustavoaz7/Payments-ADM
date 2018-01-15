@@ -42,6 +42,7 @@ const signup = (req, res, next) => {
   const confirmPW = req.body.confirm_password || ''
 
   if(!email.match(emailRegex)) return res.status(400).send({ errors: ['Invalid email']})
+  if(password.length < 6) return res.status(400).send({ errors: ["Password must be at least 6 characters long"] })
 
   const salt = bcrypt.genSaltSync()
   const passwordHash = bcrypt.hashSync(password, salt)

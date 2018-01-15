@@ -20,12 +20,12 @@ class Navbar extends Component {
             <a href="javascript:;" onMouseEnter={() => this.setState({ open: true })} 
               className="dropdown-toggle" data-toggle="dropdown"
               aria-expanded={this.state.open ? 'true' : 'false'}>
-              <img src="http://lorempixel.com/160/160/abstract" alt="User Image" className="user-image"/>
+              <img src="https://lorempixel.com/160/160/abstract" alt="User Image" className="user-image"/>
               <span className="hidden-xs">{name}</span>
             </a>
             <ul className="dropdown-menu">
               <li className="user-header">
-                <img src="http://lorempixel.com/160/160/abstract" alt="User Image" className="img-circle"/>
+                <img src="https://lorempixel.com/160/160/abstract" alt="User Image" className="img-circle"/>
                 <p>{name} <small>{email}</small> </p>
               </li>
               <li className="user-footer">
