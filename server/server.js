@@ -3,6 +3,7 @@ const server = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const compression = require('compression')
 
 const {
   BillingCycle,
@@ -14,6 +15,7 @@ const auth = require('./api/auth')
 
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
+server.use(compression())
 
 // ===== CORS =====
 
